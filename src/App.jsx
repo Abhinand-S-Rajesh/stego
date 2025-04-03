@@ -34,7 +34,7 @@ export default function SteganographyApp() {
                 responseType: "blob",
             });
             setEncodedFile(URL.createObjectURL(response.data));
-        } catch (error) {
+        } catch  {
             alert("❌ Encoding failed! Please check the file format and try again.");
         } finally {
             setLoading(false);
@@ -54,7 +54,7 @@ export default function SteganographyApp() {
         try {
             const response = await axios.post("http://127.0.0.1:5000/api/decode", formData);
             setDecodedText(response.data.text);
-        } catch (error) {
+        } catch  {
             alert("❌ Decoding failed! Make sure the image contains hidden text.");
         } finally {
             setLoading(false);

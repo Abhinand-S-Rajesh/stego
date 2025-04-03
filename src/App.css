@@ -32,7 +32,6 @@ body {
   box-shadow: 0 8px 25px var(--shadow-color);
   text-align: center;
   border: 1px solid var(--border-color);
-  backdrop-filter: blur(15px);
   position: relative;
 }
 
