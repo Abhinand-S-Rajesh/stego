@@ -1,96 +1,97 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "./App.css";
 
-export default function SteganographyApp() {
-    const [text, setText] = useState("");
-    const [file, setFile] = useState(null);
-    const [preview, setPreview] = useState(null);
-    const [encodedFile, setEncodedFile] = useState(null);
-    const [decodedText, setDecodedText] = useState("");
-    const [loading, setLoading] = useState(false);
+function App() {
+  const [encodeText, setEncodeText] = useState("");
+  const [file, setFile] = useState(null);
+  const [url, setUrl] = useState("");
+  const [encodedDownload, setEncodedDownload] = useState(null);
 
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-            setPreview(URL.createObjectURL(selectedFile));
-        }
-    };
+  const [decodeFile, setDecodeFile] = useState(null);
+  const [decodeUrl, setDecodeUrl] = useState("");
+  const [decodedText, setDecodedText] = useState("");
 
-    const handleEncode = async () => {
-        if (!file || !text) {
-            alert("⚠️ Please select an image and enter text to encode!");
-            return;
-        }
+  const handleEncode = async () => {
+    const formData = new FormData();
+    if (file) formData.append("file", file);
+    else if (url) formData.append("url", url);
+    else return alert("Please upload a file or provide an image URL.");
 
-        setLoading(true);
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("text", text);
+    formData.append("text", encodeText);
 
-        try {
-            const response = await axios.post("http://127.0.0.1:5000/api/encode", formData, {
-                responseType: "blob",
-            });
-            setEncodedFile(URL.createObjectURL(response.data));
-        } catch  {
-            alert("❌ Encoding failed! Please check the file format and try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const response = await fetch("http://127.0.0.1:5000/api/encode", {
+      method: "POST",
+      body: formData,
+    });
 
-    const handleDecode = async () => {
-        if (!file) {
-            alert("⚠️ Please select an image to decode!");
-            return;
-        }
+    if (response.ok) {
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      setEncodedDownload(downloadUrl);
+    } else {
+      const err = await response.json();
+      alert(err.error);
+    }
+  };
 
-        setLoading(true);
-        const formData = new FormData();
-        formData.append("file", file);
+  const handleDecode = async () => {
+    const formData = new FormData();
+    if (decodeFile) formData.append("file", decodeFile);
+    else if (decodeUrl) formData.append("url", decodeUrl);
+    else return alert("Please upload a file or provide an image URL.");
 
-        try {
-            const response = await axios.post("http://127.0.0.1:5000/api/decode", formData);
-            setDecodedText(response.data.text);
-        } catch  {
-            alert("❌ Decoding failed! Make sure the image contains hidden text.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const response = await fetch("http://127.0.0.1:5000/api/decode", {
+      method: "POST",
+      body: formData,
+    });
 
-    return (
-        <div className="container">
-            <div className="card">
-                <h2>Steganography Tool 🔐</h2>
-                <input type="file" onChange={handleFileChange} className="input-file" />
-                {preview && <img src={preview} alt="Selected" className="image-preview" />}
-                <textarea
-                    placeholder="Enter secret message..."
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    className="textarea"
-                />
-                <button onClick={handleEncode} className="button encode-button">Encode</button>
-                <button onClick={handleDecode} className="button decode-button">Decode</button>
+    const result = await response.json();
+    if (response.ok) {
+      setDecodedText(result.text || result.warning);
+    } else {
+      alert(result.error);
+    }
+  };
 
-                {loading && <div className="loader"></div>}
-            </div>
+  return (
+    <div className="container">
+      <h1>🕵️ Steganography Tool</h1>
+      <div className="section">
+        <h2>Encode Message</h2>
+        <textarea
+          placeholder="Enter message to hide..."
+          value={encodeText}
+          onChange={(e) => setEncodeText(e.target.value)}
+        />
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+        <input
+          type="text"
+          placeholder="or paste image URL"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+        <button onClick={handleEncode}>Encode</button>
+        {encodedDownload && (
+          <a href={encodedDownload} download="encoded.png" className="download-link">
+            Download Encoded Image
+          </a>
+        )}
+      </div>
 
-            {encodedFile && (
-                <div className="card">
-                    <h3>Download Encoded Image:</h3>
-                    <a href={encodedFile} download="encoded.png" className="download-link">Download</a>
-                </div>
-            )}
-            {decodedText && (
-                <div className="card">
-                    <h3>Decoded Message:</h3>
-                    <p className="decoded-text">{decodedText}</p>
-                </div>
-            )}
-        </div>
-    );
+      <div className="section">
+        <h2>Decode Message</h2>
+        <input type="file" onChange={(e) => setDecodeFile(e.target.files[0])} />
+        <input
+          type="text"
+          placeholder="or paste image URL"
+          value={decodeUrl}
+          onChange={(e) => setDecodeUrl(e.target.value)}
+        />
+        <button onClick={handleDecode}>Decode</button>
+        {decodedText && <p className="output">Decoded Text: <strong>{decodedText}</strong></p>}
+      </div>
+    </div>
+  );
 }
+
+export default App;

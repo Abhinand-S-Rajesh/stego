@@ -1,144 +1,72 @@
-/* Cyberpunk-Themed Steganography Tool */
-:root {
-  --primary-color: #00d9ff;
-  --secondary-color: #0c1528;
-  --text-color: rgba(255, 255, 255, 0.85);
-  --bg-color: #080d18;
-  --input-bg: rgba(255, 255, 255, 0.1);
-  --border-color: rgba(255, 255, 255, 0.2);
-  --neon-green: #00ff99;
-  --neon-red: #ff3b3b;
-  --shadow-color: rgba(0, 255, 170, 0.3);
-}
-
 body {
-  font-family: "Poppins", sans-serif;
-  background: radial-gradient(circle, #0a0f1e, #060a14);
-  color: var(--text-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+  background: #f9fafc;
+  padding: 2rem;
   margin: 0;
 }
 
-/* Glassmorphism Card */
 .container {
-  width: 90%;
-  max-width: 450px;
-  padding: 25px;
-  background: var(--secondary-color);
+  max-width: 700px;
+  margin: auto;
+  background: #fff;
+  padding: 2rem;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
   border-radius: 12px;
-  box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+h1 {
   text-align: center;
-  border: 1px solid var(--border-color);
-  position: relative;
+  margin-bottom: 2rem;
+  color: #333;
 }
 
-.container h2 {
-  color: var(--primary-color);
-  font-size: 1.6em;
-  font-weight: 600;
-  margin-bottom: 15px;
+.section {
+  margin-bottom: 2rem;
 }
 
-/* Input Fields */
-.input-file, .textarea {
+textarea {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--input-bg);
-  color: var(--text-color);
-  font-size: 1em;
-  transition: border 0.3s ease-in-out;
-}
-
-.input-file:hover, .textarea:hover {
-  border-color: var(--neon-green);
-}
-
-.textarea {
   height: 80px;
-  resize: none;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
 }
 
-/* Buttons */
-.button {
-  padding: 12px 18px;
+input[type="file"],
+input[type="text"] {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  background: #007bff;
   border: none;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1.1em;
-  font-weight: bold;
-  transition: 0.3s ease-in-out;
-  margin: 10px;
-  display: inline-block;
+  margin-top: 0.5rem;
 }
 
-.encode-button {
-  background: var(--neon-green);
-  color: black;
+button:hover {
+  background: #0056b3;
 }
 
-.decode-button {
-  background: var(--neon-red);
-  color: white;
-}
-
-.button:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 5px 15px var(--shadow-color);
-}
-
-/* Image Preview */
-.image-preview {
-  width: 100%;
-  max-height: 200px;
-  object-fit: contain;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-}
-
-/* Loading Spinner */
-.loader {
-  border: 5px solid rgba(255, 255, 255, 0.2);
-  border-top: 5px solid var(--primary-color);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 20px auto;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Download Link */
 .download-link {
-  display: block;
-  margin-top: 12px;
-  color: var(--primary-color);
-  font-weight: 600;
+  display: inline-block;
+  margin-top: 1rem;
+  color: #28a745;
   text-decoration: none;
-  transition: 0.3s ease-in-out;
+  font-weight: bold;
 }
 
-.download-link:hover {
-  text-decoration: underline;
-  text-shadow: 0px 0px 8px var(--primary-color);
-}
-
-/* Mobile Responsive */
-@media (max-width: 500px) {
-  .container {
-      width: 95%;
-  }
-  .button {
-      width: 100%;
-  }
+.output {
+  background: #f0f0f0;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
 }
