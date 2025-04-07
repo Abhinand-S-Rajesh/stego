@@ -1,72 +1,160 @@
-body {
-  font-family: "Segoe UI", sans-serif;
-  background: #f9fafc;
-  padding: 2rem;
+/* Reset & base styles */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+  color: #0f172a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Full-screen centered container */
 .container {
-  max-width: 700px;
-  margin: auto;
-  background: #fff;
-  padding: 2rem;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  border-radius: 12px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #333;
-}
-
-.section {
-  margin-bottom: 2rem;
-}
-
-textarea {
   width: 100%;
-  height: 80px;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  max-width: 850px;
+  padding: 2rem;
+  margin: 2rem;
+}
+
+/* Card with modern look */
+.card {
+  width: 100%;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* Title */
+.title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 2rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  padding: 0.7rem 1.5rem;
   font-size: 1rem;
+  border: none;
+  background-color: #e2e8f0;
+  color: #1e293b;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tabs button:hover {
+  background-color: #cbd5e1;
+  transform: scale(1.05);
+}
+
+.tabs .active {
+  background-color: #2563eb;
+  color: white;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+/* Section */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 input[type="file"],
-input[type="text"] {
-  display: block;
+textarea {
   width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
+  padding: 0.9rem 1rem;
   font-size: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  background-color: #f8fafc;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: border 0.3s ease;
+  color: #1e293b;
 }
 
+textarea:focus,
+input[type="file"]:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Modern Buttons */
 button {
-  background: #007bff;
-  border: none;
-  color: white;
-  padding: 0.6rem 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.8rem;
+  background-color: #2563eb;
+  color: #ffffff;
   font-size: 1rem;
-  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.75rem;
   cursor: pointer;
-  margin-top: 0.5rem;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-  background: #0056b3;
+  background-color: #1e40af;
+  transform: translateY(-2px);
 }
 
-.download-link {
-  display: inline-block;
-  margin-top: 1rem;
-  color: #28a745;
-  text-decoration: none;
-  font-weight: bold;
+/* Info & Output Boxes */
+.info-box,
+.output-box {
+  padding: 1.2rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
-.output {
-  background: #f0f0f0;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-top: 1rem;
+.info-box {
+  background-color: #dbeafe;
+  color: #1e3a8a;
+  border-left: 5px solid #3b82f6;
+}
+
+.output-box {
+  background-color: #dcfce7;
+  color: #065f46;
+  border-left: 5px solid #22c55e;
+}
+
+/* Error Message */
+.error {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #64748b;
+  opacity: 0.8;
 }

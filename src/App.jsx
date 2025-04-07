@@ -2,94 +2,101 @@ import React, { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [encodeText, setEncodeText] = useState("");
+  const [activeTab, setActiveTab] = useState("encode");
   const [file, setFile] = useState(null);
-  const [url, setUrl] = useState("");
-  const [encodedDownload, setEncodedDownload] = useState(null);
-
-  const [decodeFile, setDecodeFile] = useState(null);
-  const [decodeUrl, setDecodeUrl] = useState("");
-  const [decodedText, setDecodedText] = useState("");
+  const [message, setMessage] = useState("");
+  const [responseText, setResponseText] = useState("");
+  const [downloadUrl, setDownloadUrl] = useState("");
 
   const handleEncode = async () => {
+    if (!file || !message.trim()) {
+      alert("Please select an image and enter a message.");
+      return;
+    }
+
     const formData = new FormData();
-    if (file) formData.append("file", file);
-    else if (url) formData.append("url", url);
-    else return alert("Please upload a file or provide an image URL.");
+    formData.append("file", file);
+    formData.append("text", message);
 
-    formData.append("text", encodeText);
-
-    const response = await fetch("http://127.0.0.1:5000/api/encode", {
+    const res = await fetch("http://localhost:5000/api/encode", {
       method: "POST",
       body: formData,
     });
 
-    if (response.ok) {
-      const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      setEncodedDownload(downloadUrl);
+    const data = await res.json();
+    if (data.download_url) {
+      setDownloadUrl("http://localhost:5000" + data.download_url);
     } else {
-      const err = await response.json();
-      alert(err.error);
+      setResponseText(data.error || "Encoding failed.");
     }
   };
 
   const handleDecode = async () => {
-    const formData = new FormData();
-    if (decodeFile) formData.append("file", decodeFile);
-    else if (decodeUrl) formData.append("url", decodeUrl);
-    else return alert("Please upload a file or provide an image URL.");
+    if (!file) {
+      alert("Please select an image to decode.");
+      return;
+    }
 
-    const response = await fetch("http://127.0.0.1:5000/api/decode", {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("http://localhost:5000/api/decode", {
       method: "POST",
       body: formData,
     });
 
-    const result = await response.json();
-    if (response.ok) {
-      setDecodedText(result.text || result.warning);
+    const data = await res.json();
+    if (data.text) {
+      setResponseText(data.text);
     } else {
-      alert(result.error);
+      setResponseText(data.warning || data.error || "No hidden message found.");
     }
   };
 
   return (
     <div className="container">
-      <h1>🕵️ Steganography Tool</h1>
-      <div className="section">
-        <h2>Encode Message</h2>
-        <textarea
-          placeholder="Enter message to hide..."
-          value={encodeText}
-          onChange={(e) => setEncodeText(e.target.value)}
-        />
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <input
-          type="text"
-          placeholder="or paste image URL"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-        <button onClick={handleEncode}>Encode</button>
-        {encodedDownload && (
-          <a href={encodedDownload} download="encoded.png" className="download-link">
-            Download Encoded Image
-          </a>
-        )}
+      <h2 className="title">Steganography Online</h2>
+      <div className="tabs">
+        <button onClick={() => setActiveTab("encode")} className={activeTab === "encode" ? "active" : ""}>Encode</button>
+        <button onClick={() => setActiveTab("decode")} className={activeTab === "decode" ? "active" : ""}>Decode</button>
       </div>
 
-      <div className="section">
-        <h2>Decode Message</h2>
-        <input type="file" onChange={(e) => setDecodeFile(e.target.files[0])} />
-        <input
-          type="text"
-          placeholder="or paste image URL"
-          value={decodeUrl}
-          onChange={(e) => setDecodeUrl(e.target.value)}
-        />
-        <button onClick={handleDecode}>Decode</button>
-        {decodedText && <p className="output">Decoded Text: <strong>{decodedText}</strong></p>}
-      </div>
+      {activeTab === "encode" && (
+        <div className="section">
+          <p className="info-box">
+            To encode a message into an image, choose the image you want to use, enter your text and hit the <strong>Encode</strong> button.
+            The resulting image will contain your hidden message.
+          </p>
+
+          <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+          <textarea placeholder="Enter your message here" rows="4" value={message} onChange={(e) => setMessage(e.target.value)} />
+
+          <button onClick={handleEncode}>Encode</button>
+
+          {downloadUrl && <p><a href={downloadUrl} download>Download Encoded Image</a></p>}
+          {responseText && <p className="error">{responseText}</p>}
+        </div>
+      )}
+
+      {activeTab === "decode" && (
+        <div className="section">
+          <p className="info-box">
+            To decode a hidden message, upload an image that may contain steganographic content and click <strong>Decode</strong>.
+          </p>
+
+          <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+          <button onClick={handleDecode}>Decode</button>
+
+          {responseText && (
+            <div className="output-box">
+              <strong>Decoded Message:</strong>
+              <p>{responseText}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      <footer>© 2025 by you</footer>
     </div>
   );
 }
