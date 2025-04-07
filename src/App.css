@@ -12,15 +12,17 @@ html, body {
   color: #0f172a;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 1rem;
+  overflow-x: hidden;
 }
 
 /* Full-screen centered container */
 .container {
   width: 100%;
   max-width: 850px;
-  padding: 2rem;
-  margin: 2rem;
+  padding: 2rem 1rem;
+  margin: auto;
 }
 
 /* Card with modern look */
@@ -28,7 +30,6 @@ html, body {
   width: 100%;
   padding: 2.5rem;
   background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
   border-radius: 1.5rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
@@ -82,6 +83,7 @@ html, body {
   gap: 1.5rem;
 }
 
+/* Inputs */
 input[type="file"],
 textarea {
   width: 100%;
@@ -157,4 +159,44 @@ footer {
   font-size: 0.9rem;
   color: #64748b;
   opacity: 0.8;
+  word-break: break-word;
+}
+
+/* Download link styling */
+a {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #2563eb;
+  text-decoration: underline;
+  word-break: break-word;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tabs button {
+    width: 100%;
+    text-align: center;
+  }
+
+  button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  textarea, input[type="file"] {
+    font-size: 0.95rem;
+  }
 }
